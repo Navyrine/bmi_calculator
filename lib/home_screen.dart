@@ -15,10 +15,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("BMI Calculator"),
       ),
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -26,11 +28,13 @@ class _HomeScreenState extends State<HomeScreen> {
             TextField(
               controller: _heighController,
               decoration: const InputDecoration(label: Text("Height (cm)")),
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 25),
             TextField(
               controller: _weightController,
               decoration: const InputDecoration(label: Text("Weight (kg)")),
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 18),
             Row(
