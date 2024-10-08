@@ -12,10 +12,47 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _heighController = TextEditingController();
   final _weightController = TextEditingController();
+  double result = 0.00;
+
+  void calculateBmi(double weight, double height) {
+    final double bmi = weight / (height * height);
+
+    setState(() {
+      result = bmi;
+    });
+  }
+
+  void validationInput() {
+    final convertHeightController = double.tryParse(_heighController.text);
+    final convertWeightController = double.tryParse(_weightController.text);
+
+    if (convertWeightController == null || convertHeightController == null) {
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Invalid Input"),
+          content: const Text(
+              "Please make sure a valid height and weight was entered"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(ctx);
+              },
+              child: const Text("Okay"),
+            )
+          ],
+        ),
+      );
+    }
+    else
+    {
+      final convertHeightCmToM = convertHeightController/100;
+      calculateBmi(convertWeightController, convertHeightCmToM);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text("BMI Calculator"),
@@ -41,10 +78,10 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      elevation: 10
-                    ),
+                    onPressed: () {
+                      validationInput();
+                    },
+                    style: ElevatedButton.styleFrom(elevation: 10),
                     child: const Text("Calculate"),
                   ),
                 ),
@@ -63,13 +100,19 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const SizedBox(height: 10),
-                      const Text(
-                        "00.00",
-                        style: TextStyle(fontSize: 50),
+                      Text(
+                        result.toStringAsFixed(2),
+                        style: const TextStyle(fontSize: 50),
                       ),
-                      const Divider(color: Colors.grey, thickness: 5,),
+                      const Divider(
+                        color: Colors.grey,
+                        thickness: 5,
+                      ),
                       const SizedBox(height: 15),
-                      Image.asset("assets/images/bmi_categories.png", width: 600,)
+                      Image.asset(
+                        "assets/images/bmi_categories.png",
+                        width: 600,
+                      )
                     ],
                   ),
                 ),
